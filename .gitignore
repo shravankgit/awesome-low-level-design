@@ -9,3 +9,10 @@ solutions/c++/.idea/
 
 solutions/c#/bin/
 solutions/c#/obj/
+
+design-patterns/java/composite/composite.iml
+design-patterns/java/design-patterns.iml
+out/
+
+solutions/solutions.iml
+

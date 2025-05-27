@@ -8,17 +8,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import onlineshoppingservice.payment.Payment;
+import onlineshoppingservice.service.UserService;
 
 public class OnlineShoppingService {
     private static OnlineShoppingService instance;
-    private final Map<String, User> users;
     private final Map<String, Product> products;
     private final Map<String, Order> orders;
+    private UserService userService;
 
     private OnlineShoppingService() {
-        users = new ConcurrentHashMap<>();
         products = new ConcurrentHashMap<>();
         orders = new ConcurrentHashMap<>();
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public static synchronized OnlineShoppingService getInstance() {
@@ -30,12 +34,12 @@ public class OnlineShoppingService {
 
     public User registerUser(String name, String email, String password) {
         User user = new User(name, email, password);
-        users.put(user.getId(), user);
+        userService.users.put(user.getId(), user);
         return user;
     }
 
     public User getUser(String userId) {
-        return users.get(userId);
+        return userService.users.get(userId);
     }
 
     public Product addProduct(String name, String description, double price, int stock) {
@@ -45,7 +49,7 @@ public class OnlineShoppingService {
     }
 
     public void addToCart(String userId, String productId, int quantity) {
-        User user = users.get(userId);
+        User user = userService.users.get(userId);
         Product product = products.get(productId);
         if (user == null || product == null)
             throw new IllegalArgumentException("User or product not found");
@@ -54,7 +58,7 @@ public class OnlineShoppingService {
     }
 
     public Cart getUserCart(String userId) {
-        User user = users.get(userId);
+        User user = userService.users.get(userId);
         return user.getCart();
     }
 
@@ -69,7 +73,7 @@ public class OnlineShoppingService {
     }
 
     public synchronized Order placeOrder(String userId, Payment payment) {
-        User user = users.get(userId);
+        User user = userService.users.get(userId);
         if (user == null) throw new IllegalArgumentException("User not found");
 
         List<OrderItem> orderItems = new ArrayList<>();

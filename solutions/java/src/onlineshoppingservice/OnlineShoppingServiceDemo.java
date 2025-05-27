@@ -3,10 +3,14 @@ package onlineshoppingservice;
 import java.util.List;
 
 import onlineshoppingservice.payment.CreditCardPayment;
+import onlineshoppingservice.service.UserService;
 
 public class OnlineShoppingServiceDemo {
-    public static void run() {
+    public static void main(String[] args) {
         OnlineShoppingService shoppingService = OnlineShoppingService.getInstance();
+        UserService userService = UserService.getInstance();
+        shoppingService.setUserService(userService);
+
 
         // Register users
         User user1 = shoppingService.registerUser("John Doe", "john@example.com", "password123");
